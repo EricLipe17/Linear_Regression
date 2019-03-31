@@ -10,10 +10,12 @@ targets = 5 * data + 3
 
 model = LinearRegression()
 model.fit(df.iloc[:, 0], df.iloc[:, 1])
-print(model.accuracy(df.iloc[:, 1]))
+print("Model 1 coefficients: " + str(model.coefficients()))
+print("Model 1 accuracy: " + str(model.accuracy(df.iloc[:, 1])))
 model.plot(df.iloc[:, 0], df.iloc[:, 1])
 
 model2 = LinearRegression()
 model2.fit(data, targets)
-print(model2.accuracy(targets))
+print("\n\nModel 2 coefficients: " + str(model2.coefficients()))
+print("Model 2 accuracy: " + str(model2.accuracy(targets)))
 model2.plot(data, targets)
