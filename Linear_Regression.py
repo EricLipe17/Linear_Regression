@@ -11,9 +11,9 @@ class LinearRegression:
         self.denominator = None
 
     def fit(self, data, targets, return_line=False):
-        # Use your derivatives here to find the optimal solution
-        # 'data' here is the data, and 'targets' will be the y = 5x + 3 you create in your main
-        # Return the line of best fit
+        # Use your derivatives here to find the optimal solution.
+        # 'data' here is the data, and 'targets' will be the y = 5x + 3 you create in your main.
+        # Return the line of best fit if return_line=True.
         dimensionality = (len(data), )
         if data.shape != dimensionality:
             raise Exception("Please ensure the data has dimensionality of 1")
@@ -28,12 +28,13 @@ class LinearRegression:
                 return self.line
 
     def coefficients(self):
+        # Use this method to return alpha and beta if called.
         if self.line is None:
             raise Exception("Coefficients cannot be calculated if the model hasn't been fit.")
         return self.alpha, self.beta
 
     def accuracy(self, targets):
-        # Use this method to calculate the and return the R^2
+        # Use this method to calculate the and return the R^2.
         if self.line is None:
             raise Exception("Accuracy cannot be calculated if the model hasn't been fit.")
         numerator = ((targets - self.line) ** 2).sum()
@@ -42,7 +43,7 @@ class LinearRegression:
         return r_squared
 
     def plot(self, data, targets):
-        # Use this method to produce a plot of the line of best fit vs a scatter plot of the data
+        # Use this method to produce a plot of the line of best fit vs a scatter plot of the data.
         if self.line is None:
             raise Exception("Plot cannot be constructed if the model hasn't been fit.")
         plt.scatter(data, targets, label="Data")
