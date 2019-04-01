@@ -10,13 +10,35 @@ class LinearRegression:
         self.beta = None
         self.denominator = None
 
-    def fit(self, data, targets, return_line=False):
+    def fit(self, data, targets, return_line=False, gradient_descent=False, eta=0.001, precision=0.0001):
         # Use your derivatives here to find the optimal solution.
         # 'data' here is the data, and 'targets' will be the y = 5x + 3 you create in your main.
         # Return the line of best fit if return_line=True.
         dimensionality = (len(data), )
         if data.shape != dimensionality:
             raise Exception("Please ensure the data has dimensionality of 1")
+        elif gradient_descent:
+            self.denominator = np.dot(data, data) - data.mean() * data.sum()
+            curr_alpha = np.random.randn()
+            curr_beta = np.random.randn()
+            step_alpha = 999999
+            step_beta = 999999
+            iteration = 0
+            while step_alpha > precision and step_beta > precision:
+                self.alpha = curr_alpha
+                self.beta = curr_beta
+                curr_alpha = self.alpha - eta * (-2 / len(data) * (np.dot(data, targets) - self.alpha*np.dot(data, data) - self.beta * data.sum()))
+                curr_beta = self.beta - eta * (-2 / len(data) * (targets.sum() - self.alpha * data.sum() - len(data) * self.beta))
+                step_alpha = abs(curr_alpha - self.alpha)
+                step_beta = abs(curr_beta - self.beta)
+                if iteration > 10**6:
+                    print("Max iterations reached, returning estimate.")
+                    break
+                iteration += 1
+            self.line = self.alpha * data + self.beta
+            if return_line:
+                return self.line
+
         else:
             data = np.array(data)
             targets = np.array(targets)

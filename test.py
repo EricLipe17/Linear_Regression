@@ -4,7 +4,7 @@ import numpy as np
 
 df = pd.read_csv('D:\\Desktop\\Udemy_Classes\\LazyProgrammer\\machine_learning_examples-master\\linear_regression_class\\data_1d.csv')
 
-data = np.random.normal(0, 1, 100)
+data = np.random.normal(0, 1, 100000)
 
 targets = 5 * data + 3
 
@@ -19,3 +19,9 @@ model2.fit(data, targets)
 print("\n\nModel 2 coefficients: " + str(model2.coefficients()))
 print("Model 2 accuracy: " + str(model2.accuracy(targets)))
 model2.plot(data, targets)
+
+model3 = LinearRegression()
+model3.fit(data, targets, gradient_descent=True, precision=10**-10)
+print("\n\nModel 3 coefficients: " + str(model3.coefficients()))
+print("Model 3 accuracy: " + str(model3.accuracy(targets)))
+model3.plot(data, targets)
