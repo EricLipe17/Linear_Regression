@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 
 class MultipleRegression:
@@ -11,7 +12,9 @@ class MultipleRegression:
     ################################################################################
     def __init__(self):
         self.line = None
-        self.coefficients = None
+        self.regression_coefficients = None
+        self.data = None
+        self.targets = None
 
     ################################################################################
     # FIT                                                                          #
@@ -20,10 +23,12 @@ class MultipleRegression:
     # regression.                                                                  #
     ################################################################################
     def fit(self, data, targets, return_line=False):
-        weights = np.linalg.solve(np.dot(data.T, data), np.dot(data.T, targets))
+        self.data = np.array(data)
+        self.targets = np.array(targets)
+        weights = np.linalg.solve(np.dot(self.data.T, self.data), np.dot(self.data.T, self.targets))
         y_hat = np.dot(data, weights)
         self.line = y_hat
-        self.coefficients = weights
+        self.regression_coefficients = weights
         if return_line:
             return self.line
 
@@ -36,19 +41,19 @@ class MultipleRegression:
         if self.coefficients is None:
             raise Exception("Fit method must be called first.")
         else:
-            return self.coefficients
+            return self.regression_coefficients
 
     ################################################################################
     # ACCURACY                                                                     #
     #                                                                              #
     # The following returns the R-Squared score of the regression.                 #
     ################################################################################
-    def accuracy(self, targets):
+    def accuracy(self):
         if self.line is None:
             raise Exception("Accuracy cannot be calculated if the model hasn't been fit.")
         else:
-            d1 = targets - self.line
-            d2 = targets - targets.mean()
+            d1 = self.targets - self.line
+            d2 = self.targets - self.targets.mean()
             r_squared = 1 - d1.dot(d1) / d2.dot(d2)
             return r_squared
 
@@ -58,35 +63,15 @@ class MultipleRegression:
     # The following returns a plot of the regression versus the original data if    #
     # the data is two dimensional.                                                  #
     #################################################################################
-    def plot(self, data, targets):
-        if self.line is None and data.shape != (len(data), 2):
+    def plot(self):
+        if self.line is None or self.data.shape != (len(self.data), 2):
             raise Exception("Plot cannot be constructed if the model hasn't been fit.")
         else:
             fig = plt.figure()
-            ax = fig.add_subplot(111, projection='3d')
-            ax.scatter(data[:, 0], data[:, 1], targets, color="blue", label="Data")
-            ax.plot(data[:, 0], data[:, 1], self.line, color="red", label="Regression Line")
+            ax = Axes3D(fig)
+            ax.scatter(self.data[:, 0], self.data[:, 1], self.targets, c="blue", label="Data")
+            ax.scatter(self.data[:, 0], self.data[:, 1], self.line, c="red", label="Regression Predictions")
+            plt.title("Regression VS Data")
+            plt.legend()
             plt.show()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
