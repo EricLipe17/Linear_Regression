@@ -78,10 +78,11 @@ class LinearRegression:
     def accuracy(self):
         if self.line is None:
             raise Exception("Accuracy cannot be calculated if the model hasn't been fit.")
-        numerator = ((self.targets - self.line) ** 2).sum()
-        denominator = ((self.targets - self.targets.mean()) ** 2).sum()
-        r_squared = 1 - numerator / denominator
-        return r_squared
+        else:
+            d1 = self.targets - self.line
+            d2 = self.targets - self.targets.mean()
+            r_squared = 1 - d1.dot(d1) / d2.dot(d2)
+            return r_squared
 
     #################################################################################
     # PLOT                                                                          #
